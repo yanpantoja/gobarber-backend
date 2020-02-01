@@ -43,6 +43,9 @@ class UserController {
           'oldPassword',
           (oldPassword, field) => (oldPassword ? field.required() : field) // se a minha variavel oldPassword estiver preenchida eu quero que nosso field seja required, se nao retorna como estava antes, sem ser obrigatorio
         ),
+      confirmPassword: Yup.string().when('password', (password, field) =>
+        password ? field.required().oneOf([Yup.ref('password')]) : field
+      ),
     });
 
     if (!(await schema.isValid(req.body))) {
